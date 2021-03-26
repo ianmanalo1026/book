@@ -1,43 +1,13 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-
 from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.authtoken.views import ObtainAuthToken
+
 
 from .models import Book, Upvote
 from .serializers import (
                           BookSerializer, 
                           UpvoteSerializer, 
-                          RegistrationSerializer
                           )
-
-
-class UserRegisterationView(generics.CreateAPIView):
-    """Create new user that generate automatic token"""
-    queryset = User.objects.all()
-    serializer_class = RegistrationSerializer
-    permission_classes = [permissions.AllowAny]
-    
-    def post(self, request, *args, **kwargs):
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            token = Token.objects.get(user=user).key
-            data = {'token':token}
-        else:
-            data = serializer.errors
-        return Response(data=data, status=201)
-    
-    
-class LoginView(generics.CreateAPIView):
-    serializer_class = AuthTokenSerializer
-    
-    def create(self, request):
-        return ObtainAuthToken().as_view()(request=request._request)
     
     
 class BookCreateView(generics.CreateAPIView):

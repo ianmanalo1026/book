@@ -11,14 +11,18 @@ from core.views import (
                         UpvoteCreateView,
                         BookDetailView,
                         BookUpdateView,
-                        UserRegisterationView,
-                        LoginView,
                         )
+from rest_framework_simplejwt.views import (
+                                            TokenObtainPairView,
+                                            TokenRefreshView,
+                                            TokenVerifyView,
+                                            )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/login/', LoginView.as_view()),
-    path('api/register/', UserRegisterationView.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/book/', BookListView.as_view()),
     path('api/book/create/', BookCreateView.as_view()),
     path('api/book/<int:pk>/detail/', BookDetailView.as_view()),

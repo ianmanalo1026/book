@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from .models import Book, Upvote
 
 class BookSerializer(serializers.ModelSerializer):
@@ -25,16 +24,3 @@ class UpvoteSerializer(serializers.ModelSerializer):
         fields = ('id',)
         read_only_fields = ('id',)
         
-
-class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(style={'input type':'password'}, write_only=True)
-    
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name')
-        
-    def create(self, validated_data):
-        user = User.objects.create(username=validated_data['username'], email=validated_data['email'])
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
