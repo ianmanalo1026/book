@@ -2,11 +2,12 @@ from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 
+from django.contrib.auth.models import User
 
-from .models import Book, Upvote
+from .models import Book
 from .serializers import (
-                          BookSerializer, 
-                          UpvoteSerializer, 
+                          BookSerializer,
+                          RegistrationSerializer 
                           )
     
     
@@ -14,30 +15,36 @@ class BookCreateView(generics.CreateAPIView):
     """Create a Book"""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 class BookListView(generics.ListAPIView):
     """Show all books"""
-    queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Book.objects.filter(user=user)
 
 
 class BookDetailView(generics.RetrieveAPIView):
     """Show detail of the book"""
-    queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Book.objects.filter(user=user)
     
 
 class BookUpdateView(generics.RetrieveUpdateDestroyAPIView):
     """update detail of the book"""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (IsAuthenticated,)
     
     
     def delete(self, request, *args, **kwargs):
@@ -53,20 +60,8 @@ class BookUpdateView(generics.RetrieveUpdateDestroyAPIView):
             raise ValidationError("You are not the owner of this book")
         serializer.save(user=self.request.user, book=book)
     
-    
-class UpvoteCreateView(generics.CreateAPIView):
-    """Vote for a specific book"""
-    serializer_class = UpvoteSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def get_queryset(self):
-        user = self.request.user
-        book = Book.objects.get(pk=self.kwargs['pk'])
-        return Upvote.objects.filter(user=user, book=book)
-    
-    def perform_create(self, serializer):
-        if self.get_queryset().exists():
-            raise ValidationError('You have already voted on this!')
-        user = self.request.user
-        book = Book.objects.get(pk=self.kwargs['pk'])
-        serializer.save(user=user, book=book)
+
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegistrationSerializer
+    permission_classes = [permissions.AllowAny]

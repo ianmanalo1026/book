@@ -11,12 +11,6 @@ class Book(models.Model):
     
     def __str__(self):
         return self.title
-    
-class Upvote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.book
+
     
         
