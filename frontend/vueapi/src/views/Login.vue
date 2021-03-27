@@ -1,17 +1,30 @@
 <template>
-<div>
-        <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
-
-        <p v-if="incorrectAuth">Incorrect username or password entered - please try again</p>
-        <form v-on:submit.prevent="login">
-          <div class="form-group">
-            <input type="text" name="username" id="user" v-model="username" class="form-control" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <input type="password" name="password" id="pass" v-model="password" class="form-control" placeholder="Password">
-          </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+<div class="sign-in">
+  <el-row :gutter="12">
+    <el-col :span="8">
+      <el-card shadow="always" class="box-card">
+          <p v-if="incorrectAuth">Incorrect username or password entered - please try again</p>
+          <form v-on:submit.prevent="login">
+            <div style="margin-bottom: 45px;">
+              <h1>Sign Here</h1>
+            </div>
+            <div style="margin-top: 15px;">
+              <el-input type="text" name="username" id="user" v-model="username">
+                <template slot="prepend">Username</template>
+              </el-input>
+            </div>
+            <div style="margin-top: 15px;">
+              <el-input type="password" name="password" id="pass" v-model="password">
+                <template slot="prepend">Password</template>
+              </el-input>
+            </div>
+            <div style="margin-top: 50px;">
+              <el-button type="success" native-type="submit" round>Login</el-button>
+            </div>
         </form>
+      </el-card>
+    </el-col>
+  </el-row>
 </div>
 </template>
 
@@ -22,7 +35,8 @@
       return {
         username: '',
         password: '',
-        incorrectAuth: false
+        incorrectAuth: false,
+        input: '',
       }
     },
     methods: {
@@ -53,5 +67,18 @@ body {
   }
   input {
     padding: 25px 10px;
+}
+
+.box-card {
+  width: 500px;
+  height:350px;
+}
+
+.sign-in{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
 }
 </style>

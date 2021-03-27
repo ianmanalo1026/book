@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './routes.js'
 import store from './store'
 import IdleVue from 'idle-vue'
+import './plugins/element.js'
+
 
 const eventsHub = new Vue()
 
