@@ -28,5 +28,20 @@ export default new VueRouter ({
             name: 'logout',
             component: Logout,
         },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: Logout,
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: Logout,
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: Logout,
+        },
     ]
 })
